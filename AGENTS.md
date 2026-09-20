@@ -8,7 +8,7 @@ This repository contains an idempotent developer tool installer for macOS and Li
 
 - `install.sh` — Main entry point. Runs all or specific tool modules. Supports `--upgrade` to re-install existing tools.
 - `status.sh` — Reports installation status (version, path) for all or specific tools.
-- `lib/common.sh` — Shared helpers: OS detection, logging, package install wrappers (`pkg_install`, `cargo_install`, `npm_install_global`, `uv_tool_install`, `github_install_deb`, `github_install_tar`), and status formatting (`std_status`, `print_status`).
+- `lib/common.sh` — Shared helpers: OS detection, logging, package install wrappers (`pkg_install`, `cargo_install`, `npm_install_global`, `uv_tool_install`, `github_install_deb`, `github_install_tar`), shell rc detection (`shell_rc_file`, `shell_rc_has`), and status formatting (`std_status`, `print_status`).
 - `tools/*.sh` — One file per tool. Each implements four functions: `tool_name`, `tool_check`, `tool_install`, `tool_status`.
 
 ## Key Conventions
@@ -39,6 +39,7 @@ If the tool must install before others, use a numeric prefix (e.g., `06-mytool.s
 - **`set -e` in scripts**: Version commands that exit non-zero (e.g., `dig --version`) will abort the script. The `std_status` helper uses `|| true` to guard against this.
 - **Variable shadowing**: `lib/common.sh` uses `COMMON_DIR` instead of `SCRIPT_DIR` to avoid overwriting the caller's `SCRIPT_DIR` when sourced.
 - **Shell state between tools**: Tool files are sourced sequentially into the same shell, so functions from one tool overwrite the previous. This is intentional. Tools that need a prerequisite in PATH (e.g., node needs nvm) should call `load_nvm` / `load_cargo` themselves.
+- **Upstream installers and rc files**: Installers that edit shell startup files guess which file to use. On a fresh macOS, `~/.zshrc` may not exist yet when nvm runs, so nvm falls back to `~/.profile`, which zsh never reads, and everything npm-installed is missing from the user's shell. Point such installers at `shell_rc_file` (e.g., `PROFILE="$(shell_rc_file)"` for nvm) and make `tool_check` verify the loader is present with `shell_rc_has`.
 
 ## Testing Changes
 

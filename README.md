@@ -138,6 +138,8 @@ tool_status() {
 | `std_status name cmd [version_flag]` | Print a standard status row |
 | `print_status name status [version] [path]` | Print a custom status row |
 | `load_nvm` / `load_cargo` | Load version managers into the current shell |
+| `shell_rc_file` | Rc file the interactive shell reads (`~/.zshrc`, `~/.bashrc`, ...) |
+| `shell_rc_has text` | Check if that rc file already contains `text` |
 | `ensure_brew` | Error if Homebrew is not installed (macOS) |
 | `get_arch` | Returns `amd64` or `arm64` |
 | `log_info` / `log_success` / `log_skip` / `log_error` | Colored logging |

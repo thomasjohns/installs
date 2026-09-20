@@ -6,6 +6,7 @@ source "$SCRIPT_DIR/lib/common.sh"
 
 TOOLS_DIR="$SCRIPT_DIR/tools"
 UPGRADE=false
+INSTALLED_ANY=false
 
 usage() {
     echo "Usage: ./install.sh [-u|--upgrade] [tool ...]"
@@ -52,6 +53,7 @@ install_tool() {
         fi
         if tool_install; then
             log_success "$name installed"
+            INSTALLED_ANY=true
         else
             log_error "Failed to install $name"
         fi
@@ -70,4 +72,9 @@ else
     for tool_file in "$TOOLS_DIR"/*.sh; do
         install_tool "$tool_file"
     done
+fi
+
+if $INSTALLED_ANY; then
+    echo ""
+    log_info "Restart your shell (or open a new terminal) so PATH changes take effect."
 fi

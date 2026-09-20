@@ -79,6 +79,26 @@ load_cargo() {
     [[ -s "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
 }
 
+# Rc file read by the user's interactive shell (where PATH/loader lines belong).
+# Upstream installers guess this themselves and can guess wrong on a fresh
+# machine (e.g., nvm falls back to ~/.profile if ~/.zshrc does not exist yet).
+shell_rc_file() {
+    case "$(basename "${SHELL:-sh}")" in
+        zsh) echo "$HOME/.zshrc" ;;
+        bash)
+            if is_mac; then echo "$HOME/.bash_profile"; else echo "$HOME/.bashrc"; fi
+            ;;
+        *) echo "$HOME/.profile" ;;
+    esac
+}
+
+# True if the shell rc file already contains the given text
+shell_rc_has() {
+    local rc
+    rc="$(shell_rc_file)"
+    [[ -f "$rc" ]] && grep -qF -- "$1" "$rc"
+}
+
 # Install via apt (Linux) or brew (Mac)
 pkg_install() {
     local apt_pkg="$1"
