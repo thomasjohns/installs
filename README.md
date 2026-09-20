@@ -73,6 +73,8 @@ Foundation tools are numbered (`00-`, `01-`, ...) so they install first when run
 | **gh** | GitHub CLI | brew | official apt repo |
 | **git-delta** | Better git diffs | brew | GitHub .deb |
 | **glow** | Markdown renderer | brew | GitHub tarball |
+| **herdr** | Agent terminal multiplexer | curl installer | curl installer |
+| **hunk** | Terminal diff viewer for agent changes | brew | GitHub tarball |
 | **jq** | JSON processor | brew | apt |
 | **just** | Command runner | brew | cargo |
 | **kubectl** | Kubernetes CLI | brew | official binary |
